@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <H2>Axios基本使用</H2>
+  <br>
+  <button style="background-color: blue;" class="btn-primary">
+    <h3>发送GET请求</h3>
+  </button>
+  <button style="background-color: yellow;" class="btn-warning">
+    <h3>发送POST请求</h3>
+  </button>
+  <button style="background-color: green;" class="btn-success">
+    <h3>发送PUT请求</h3>
+  </button>
+  <button style="background-color: red;" class="btn-danger">
+    <h3>发送DELETE请求</h3>
+  </button>
+  <script>
+    const btn = document.querySelectorAll('button')
+    // axios.request请求方式 发送GET 请求
+    btn[0].onclick = function () {
+      axios.request({
+        method: 'GET',
+        url: 'http://localhost:3000/comments'
+      }).then(response => {
+        console.log(response)
+      })
+    }
+
+    // axios.POST请求方式 发送POST 请求
+    btn[1].onclick = function () {
+      axios.post(
+        'http://localhost:3000/comments',
+        {
+          "body": "Xiaoshital is programator",
+          "postId": 2
+        }).then(response => {
+          console.log(response);
+        })
+    }
+
+  </script>
+</body>
+
+</html>

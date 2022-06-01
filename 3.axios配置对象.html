@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    .btn {
+      color: #FFF;
+      border-radius: 4PX;
+    }
+  </style>
+</head>
+
+<body>
+  <H2>Axios基本使用</H2>
+  <br>
+  <button style="background-color: blue;" class="btn btn-primary">
+    <h3>发送GET请求</h3>
+  </button>
+  <button style="background-color: yellowgreen;" class="btn btn-warning">
+    <h3>发送POST请求</h3>
+  </button>
+  <button style="background-color: green;" class="btn btn-success">
+    <h3>发送PUT请求</h3>
+  </button>
+  <button style="background-color: red;" class="btn btn-danger">
+    <h3>发送DELETE请求</h3>
+  </button>
+  <script>
+    const btn = document.querySelectorAll('button')
+
+    {
+      url: '/user'
+      baseUrl: 'https://some-domain.com/api' // 设置整个请求的路径的前面结构 url只要后面路由名就行
+      transformRequest: // 可以对请求的数据 进行处理
+      transformResponse: // 可以对响应的结果 做一些改变
+      headerS: // 请求头信息 身份验证的时候常用到
+      params: // 接收一个对象 设定url参数，即在url后面接入参
+      withCredentials: //跨域请求 携带cookie
+      responseType: // 返回结果的类型，默认json
+      xsrfCookieName: 'XSRF-TOKEN' // 跨站请求标识，安全设置，保证请求来自自己的客户端，保护作用
+      proxy: // 做代理
+    }
+
+  </script>
+</body>
+
+</html>

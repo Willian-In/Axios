@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <H2>Axios基本使用</H2>
+  <br>
+  <button style="background-color: blue;" class="btn-primary">
+    <h3>发送GET请求</h3>
+  </button>
+  <button style="background-color: yellow;" class="btn-warning">
+    <h3>发送POST请求</h3>
+  </button>
+  <button style="background-color: green;" class="btn-success">
+    <h3>发送PUT请求</h3>
+  </button>
+  <button style="background-color: red;" class="btn-danger">
+    <h3>发送DELETE请求</h3>
+  </button>
+  <script>
+    const btn = document.querySelectorAll('button')
+
+    // 设置请求拦截器 config 配置对象 可对其进行修改
+    axios.interceptors.request.use(function (config) {
+      console.log('请求拦截器 成功 - 1号')
+      return config;
+      // throw '参数出了问题'
+    }, function (error) {
+      console.log('请求拦截器 失败 - 1号')
+      return Promise.reject(error);
+    });
+
+    // 设置请求拦截器
+    axios.interceptors.request.use(function (config) {
+      console.log('请求拦截器 成功 - 2号')
+      return config;
+      // throw '参数出了问题'
+    }, function (error) {
+      console.log('请求拦截器 失败 - 2号')
+      return Promise.reject(error);
+    });
+
+    // 设置响应拦截器
+    axios.interceptors.response.use(function (response) {
+      console.log('响应拦截器 成功 - 1号')
+      return response;
+    }, function (error) {
+      console.log('响应拦截器 失败 - 1号')
+      return Promise.reject(error);
+    });
+
+    // 设置响应拦截器
+    axios.interceptors.response.use(function (response) {
+      console.log('响应拦截器 成功 - 2号')
+      return response;
+    }, function (error) {
+      console.log('响应拦截器 失败 - 2号')
+      return Promise.reject(error);
+    });
+
+    axios({
+      method: 'GET',
+      url: 'http://localhost:3000/posts'
+    }).then(res => {
+      console.log('自定义成功回调');
+    }).catch(err => {
+      console.log('自定义失败回调');
+    })
+    // 打印得到：
+    // 请求拦截器 成功 - 2号
+    // 请求拦截器 失败 - 1号
+    // 响应拦截器 失败 - 1号
+    // 响应拦截器 失败 - 2号
+    // 结论: 请求拦截器：后进先执行，相应拦截器：先进先执行（对源码进行再深入解读）
+
+  </script>
+</body>
+
+</html>

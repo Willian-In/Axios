@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <H2>Axios基本使用</H2>
+  <br>
+  <button style="background-color: blue;" class="btn-primary">
+    <h3>发送GET请求</h3>
+  </button>
+  <button style="background-color: yellow;" class="btn-warning">
+    <h3>发送POST请求</h3>
+  </button>
+  <button style="background-color: green;" class="btn-success">
+    <h3>发送PUT请求</h3>
+  </button>
+  <button style="background-color: red;" class="btn-danger">
+    <h3>发送DELETE请求</h3>
+  </button>
+  <script>
+    const btn = document.querySelectorAll('button')
+
+    const a = axios.create({
+      baseURL: 'http://localhost:3000',
+      timeout: 1000
+
+    })
+    // a 与 axios 对象的功能几近一样
+    console.log(a);
+
+    a.get('/posts').then(res => {
+      console.log(res, '---------res');
+    })
+
+  </script>
+</body>
+
+</html>

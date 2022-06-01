@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <H2>Axios基本使用</H2>
+  <br>
+  <button style="background-color: blue;" class="btn-primary">
+    <h3>发送GET请求</h3>
+  </button>
+  <button style="background-color: yellow;" class="btn-warning">
+    <h3>发送POST请求</h3>
+  </button>
+  <button style="background-color: green;" class="btn-success">
+    <h3>发送PUT请求</h3>
+  </button>
+  <button style="background-color: red;" class="btn-danger">
+    <h3>发送DELETE请求</h3>
+  </button>
+  <script>
+    // 使用cdk引入了axios在js中就可以直接使用axios
+    const btn = document.querySelectorAll('button')
+    btn[0].onclick = function () {
+      // axios 接收一个对象参数
+      axios({
+        // 请求类型 GET POST ....
+        method: 'GET',
+        url: 'http://localhost:3000/posts/2'
+        // axios返回的是一个promise的实例对象 直接使用then进行接收调用
+      }).then(response => {
+        console.log(response, '----------res')
+      })
+    }
+
+
+    btn[1].onclick = function () {
+      // axios 接收一个对象参数
+      axios({
+        // 请求类型 GET POST ....
+        method: 'POST',
+        url: 'http://localhost:3000/posts',
+        // 添加 数据放在data 一个对象类型
+        data: {
+          title: '今天上海解封的第一天,天气可真好',
+          author: 'Xiaoshital'
+        }
+        // axios返回的是一个promise的实例对象 直接使用then进行接收调用
+      }).then(response => {
+        console.log(response, '----------res')
+      })
+    }
+
+    btn[2].onclick = function () {
+      // axios 接收一个对象参数
+      axios({
+        // 请求类型 GET POST ....
+        method: 'PUT',
+        url: 'http://localhost:3000/posts/3',
+        // 添加 数据放在data 一个对象类型
+        data: {
+          title: '今天上海解封的第一天,天气可真好',
+          author: 'Xiaoshital_PUT'
+        }
+        // axios返回的是一个promise的实例对象 直接使用then进行接收调用
+      }).then(response => {
+        console.log(response, '----------res')
+      })
+    }
+
+    btn[3].onclick = function () {
+      // axios 接收一个对象参数
+      axios({
+        // 请求类型 GET POST ....
+        method: 'DELETE',
+        url: 'http://localhost:3000/posts/3',
+        // 添加 数据放在data 一个对象类型
+        // axios返回的是一个promise的实例对象 直接使用then进行接收调用
+      }).then(response => {
+        console.log(response, '----------res')
+      })
+    }
+
+    console.log(axios);
+  </script>
+</body>
+
+</html>
