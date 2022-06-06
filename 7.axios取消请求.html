@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <H2>Axios基本使用</H2>
+  <br>
+  <button style="background-color: blue;" class="btn-primary">
+    <h3>发送GET请求</h3>
+  </button>
+  <button style="background-color: yellow;" class="btn-warning">
+    <h3>取消请求</h3>
+  </button>
+  <script>
+    // 获取按钮
+    const btn = document.querySelectorAll('button')
+
+    // 2.声明全局变量
+    let cancel = null
+
+    // 发送请求
+    btn[0].onclick = function () {
+      // 判断cancel值 
+      if (cancel !== null) {
+        // 取消上一次请求
+        cancel()
+      }
+      axios({
+        method: 'GET',
+        url: 'http://localhost:3000/comments',
+        // 1.添加配置对象的属性
+        cancelToken: new axios.CancelToken(function(c) {
+          // 3. 将c的值赋给cancel
+          cancel = c
+        })
+      }).then(res => {
+        console.log(res, '----返回的数据')
+        cancel = null
+      })
+    }
+
+    // 运用场景，当用户点击按钮进行多次请求的时候 如果连续出现多个请求 可以取消一些请求
+
+    // 调用cancel json-server 使用延时处理，进行对此功能的验证 --daly 2000
+    btn[1].onclick = function () {
+      cancel()
+    }
+
+  </script>
+</body>
+
+</html>

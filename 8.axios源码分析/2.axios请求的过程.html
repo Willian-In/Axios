@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+</head>
+
+<body>
+  <script>
+    // 模拟axio 调用
+    // axios()
+    // axios.get()
+    // axios.post()
+
+    // 1.构造函数
+    function Axios (config) {
+
+      this.default = config // 创建默认属性
+      this.intercepter = {
+        request: {},
+        Response: {}
+      }
+    }
+
+    // 2.往原型上面挂载方法
+    Axios.prototype.request = function (config) {
+      console.log('发送 Ajax 请求 请求的类型为' + config.method);
+      // 5.发送请求
+      // 创建一个promise对象
+      let promise = Promise.resolve(config)
+      // 声明一个数组
+      let chains = [dispatchRequest, undefined] // undefined 只是为了占位
+      // 调用promise then 方法
+      let result = promise.then(chains[0], chains[1]) // then方法 会执行第一个参数，第一个参数返回的也是一个promise对象
+      // 返回 promise 的结果
+      return result
+    }
+
+    Axios.prototype.get = function (config) {
+      // 调用request 进行ajax请求
+      return this.request({ method: 'GET' })
+    }
+
+    Axios.prototype.post = function (config) {
+      return this.request({ method: 'POST' })
+    }
+
+    // 3.创建createInstance函数 实现axios() axios.get()等方法
+    function createInstance (config) {
+      // 实例化一个对象
+      const context = new Axios(config) // context 可以调用原型上面的方法和属性
+      // 创建请求函数
+      const instance = Axios.prototype.request.bind(context) // instance 是一个函数 并且可以调用instan({}). 无法当作对象使用
+
+      // 将Axios.prototype对象中的方法添加到instan函数对象中
+
+      Object.keys(Axios.prototype).forEach(key => {
+        console.log(key);
+        instance[key] = Axios.prototype[key].bind(context)
+      });
+
+      // 为instance 函数对象添加属性 default 与 intercepter
+      Object.keys(context).forEach(key => {
+        console.log(key);
+        instance[key] = context[key]
+      })
+      return instance
+    }
+    // 6.dispatchRequest 函数
+    function dispatchRequest (config) {
+      console.log('dispatchRequest');
+      // 调用适配器 发送请求
+      return xhrAdapter(config).then(response => {
+        // 响应的结果进行转换处理
+        console.log(response);
+        return response
+      }, error => {
+        throw error
+      })
+    }
+
+    // 7. adapter 适配器 适配 http 或者https
+    function xhrAdapter (config) {
+      console.log('xhrAdapter 函数执行');
+      return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest()
+        // 初始化 只考虑 请求方法和请求路由的情况
+        xhr.open(config.method, config.url);
+        // 发送
+        xhr.send();
+        // 判断状态
+        xhr.onreadystatechange = function () {
+          // 成功的状态
+          console.log(xhr.readyState);
+          if (xhr.readyState === 4) {
+            // 判断请求发送成功
+            if (xhr.status >= 200 && xhr.status < 300) {
+              // 成功就调用resolv 返回结果
+              resolve({
+                // 配置对象
+                config: config,
+                // 响应体
+                data: xhr.response,
+                // 响应头
+                headers: xhr.getAllResponseHeaders(), // 字符串
+                // xhr请求对象
+                request: xhr,
+                // 响应状态码
+                status: xhr.status,
+                // 响应状态字符串
+                statusText: xhr.statusText
+
+              })
+            }
+          } else {
+            // 失败的状态
+            reject(new Error('请求失败 失败的状态码为' + xhr.status))
+          }
+        }
+      })
+    }
+
+    let axios = createInstance()
+
+
+    // 发送请求
+    axios({
+      method: 'GET',
+      url: 'http://localhost:3000/posts'
+    }).then(response => {
+      console.log(response);
+    })
+
+
+
+
+  </script>
+</body>
+
+</html>

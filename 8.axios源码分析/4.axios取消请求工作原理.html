@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+</head>
+
+<body>
+  <H2>Axios基本使用</H2>
+  <br>
+  <button style="background-color: blue;" class="btn-primary">
+    <h3>发送GET请求</h3>
+  </button>
+  <button style="background-color: yellow;" class="btn-warning">
+    <h3>取消请求</h3>
+  </button>
+  <script>
+    function Axios (config) {
+      this.config = config
+    }
+    Axios.prototype.request = function (config) {
+      return dispatchRequest(config)
+    }
+    // dispatchRequest
+    function dispatchRequest (config) {
+      return xhrAdaoter(config)
+    }
+
+    function xhrAdaoter (config) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest()
+        xhr.open(config.method, config.url)
+        xhr.send()
+        xhr.onreadystatechange = function () {
+          console.log(xhr.readyState);
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              // 设置成功的状态
+              resolve({
+                status: xhr.status,
+                statusText: xhr.statusText
+              })
+            }
+          }
+        }
+        // 取消请求的处理
+        if (config.cancelToken) {
+          // 对cancelToken 对象身上的promise 对象值定成功的回调
+          config.cancelToken.promise.then(value => {
+            console.log(1);
+            xhr.abort()
+          })
+        }
+      })
+    }
+    // cancelToken 构造函数
+    function CancelToken (executor) {
+      // 声明要给变量
+      var resolvePromise
+      // 为实例对象添加属性
+      this.promise = new Promise(resolve => {
+        // 将resolve赋值给resolvePromise
+        resolvePromise = resolve
+      })
+      // 调用executor 函数
+      executor(function () {
+        resolvePromise()
+      })
+    }
+
+    let cancel = null
+
+    let context = new Axios({})
+
+    let axios = Axios.prototype.request.bind(context)
+
+    // 获取按钮
+    const btn = document.querySelectorAll('button')
+
+    btn[0].onclick = function () {
+
+      // 创建cancelToken 的值
+      let cancelToken = new CancelToken(function (c) {
+        cancel = c
+      })
+
+      // 发送请求
+      axios({
+        method: 'GET',
+        url: 'http://localhost:3000/posts',
+        cancelToken
+      }).then(response => {
+        console.log(response);
+      })
+    }
+
+    btn[1].onclick = function () {
+      if (cancel != null) {
+        cancel()
+      }
+    }
+
+
+  </script>
+</body>
+
+</html>
